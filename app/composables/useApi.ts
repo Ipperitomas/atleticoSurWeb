@@ -1,6 +1,9 @@
 export function useApi() {
+  const config = useRuntimeConfig()
+  const apiBase = config.public.apiBase as string
+
   async function post<T = any>(endpoint: string, body: Record<string, any>) {
-    const response = await $fetch<T>(endpoint, {
+    const response = await $fetch<T>(`${apiBase}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -12,7 +15,7 @@ export function useApi() {
   }
 
   async function get<T = any>(endpoint: string) {
-    const response = await $fetch<T>(endpoint, {
+    const response = await $fetch<T>(`${apiBase}${endpoint}`, {
       headers: {
         'Accept': 'application/json'
       }
@@ -20,5 +23,5 @@ export function useApi() {
     return response
   }
 
-  return { post, get }
+  return { post, get, apiBase }
 }

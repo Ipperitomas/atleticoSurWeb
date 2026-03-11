@@ -53,8 +53,10 @@ const fallbackMatch = {
   matchday: 'Fecha 2'
 }
 
+const { apiBase } = useApi()
+
 // Fetch desde la API (solo client-side, no durante prerender)
-const { data: apiMatch } = useLazyFetch('/api/next-match', {
+const { data: apiMatch } = useLazyFetch(`${apiBase}/api/next-match`, {
   headers: { 'Accept': 'application/json' },
   server: false,
   default: () => fallbackMatch
