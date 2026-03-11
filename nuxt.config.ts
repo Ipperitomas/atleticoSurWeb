@@ -14,7 +14,19 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: 'static'
+    preset: 'static',
+    devProxy: {
+      '/api/': {
+        target: 'http://gestion.atleticosur.com.ar/api/',
+        changeOrigin: true
+      }
+    }
+  },
+
+  routeRules: {
+    '/api/**': {
+      proxy: 'http://gestion.atleticosur.com.ar/api/**'
+    }
   },
 
   runtimeConfig: {

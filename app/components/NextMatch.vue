@@ -43,8 +43,6 @@
 </template>
 
 <script setup>
-const { apiBase } = useApi()
-
 // Datos fallback por si la API no responde
 const fallbackMatch = {
   home: { name: 'Atlético Sur', logo: '/logo.png', isLocal: true },
@@ -55,8 +53,8 @@ const fallbackMatch = {
   matchday: 'Fecha 2'
 }
 
-// Fetch desde la API externa, con fallback si falla o no hay partido
-const { data: apiMatch } = await useFetch(`${apiBase}/api/next-match`, {
+// Fetch desde la API (proxied), con fallback si falla o no hay partido
+const { data: apiMatch } = await useFetch('/api/next-match', {
   headers: { 'Accept': 'application/json' },
   default: () => fallbackMatch
 })
