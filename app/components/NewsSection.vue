@@ -39,14 +39,14 @@ const fallbackNews = [
   {
         id: 0,
         title: 'Debut Historico',
-        content: 'El equipo de primera división logró una importante empate por 0 a 0 en su debut historico. Un gran partido que deja al Sureño bien posicionado.',
+        excerpt: 'El equipo de primera división logró una importante empate por 0 a 0 en su debut historico. Un gran partido que deja al Sureño bien posicionado.',
         published_at: '2026-03-01T18:00:00-03:00',
         category: 'Primera'
       },
       {
         id: 2,
         title: 'Nuevos sponsor para el club',
-        content: 'Se suman los nuevos sponsors para acompañar el debut del club en la Primera Division de la Liga Departamental de Gualeguaychú. Agradecemos el compromiso con el desarrollo deportivo de nuestra ciudad.',
+        excerpt: 'Se suman los nuevos sponsors para acompañar el debut del club en la Primera Division de la Liga Departamental de Gualeguaychú. Agradecemos el compromiso con el desarrollo deportivo de nuestra ciudad.',
         published_at: '2026-02-15T18:00:00-03:00',
         category: 'Institucional'
       }
