@@ -37,29 +37,19 @@ const { get } = useApi()
 
 const fallbackNews = [
   {
-    id: 0,
-    title: 'Gran victoria de Atlético Sur',
-    excerpt: 'El equipo de primera división logró una importante victoria por 2 a 0 en la última fecha del campeonato.',
-    published_at: '2026-03-01T18:00:00-03:00',
-    category: 'Primera',
-    image_url: null
-  },
-  {
-    id: 1,
-    title: 'Comenzó la temporada de la escuelita',
-    excerpt: 'Más de 80 chicos comenzaron los entrenamientos en el club con mucho entusiasmo.',
-    published_at: '2026-03-01T18:00:00-03:00',
-    category: 'Escuelita',
-    image_url: null
-  },
-  {
-    id: 2,
-    title: 'Nuevo sponsor para el club',
-    excerpt: 'Una empresa local se suma al apoyo del fútbol infantil y juvenil del club.',
-    published_at: '2026-02-15T18:00:00-03:00',
-    category: 'Institucional',
-    image_url: null
-  }
+        id: 0,
+        title: 'Debut Historico',
+        content: 'El equipo de primera división logró una importante empate por 0 a 0 en su debut historico. Un gran partido que deja al Sureño bien posicionado.',
+        published_at: '2026-03-01T18:00:00-03:00',
+        category: 'Primera'
+      },
+      {
+        id: 2,
+        title: 'Nuevos sponsor para el club',
+        content: 'Se suman los nuevos sponsors para acompañar el debut del club en la Primera Division de la Liga Departamental de Gualeguaychú. Agradecemos el compromiso con el desarrollo deportivo de nuestra ciudad.',
+        published_at: '2026-02-15T18:00:00-03:00',
+        category: 'Institucional'
+      }
 ]
 
 const news = ref(fallbackNews)
