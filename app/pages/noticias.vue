@@ -12,14 +12,36 @@
     <section class="page-content">
       <div class="container">
 
-        <article v-for="(item, i) in news" :key="i" class="news-article">
+        <div v-if="loading && !news.length" class="loading-state">
+          Cargando noticias...
+        </div>
+
+        <article v-for="item in news" :key="item.id" class="news-article">
           <div class="article-meta">
-            <span class="badge" :class="item.badgeClass">{{ item.category }}</span>
-            <span class="article-date">{{ item.date }}</span>
+            <span class="badge" :class="badgeClass(item.category)">{{ item.category }}</span>
+            <span class="article-date">{{ formatDate(item.published_at) }}</span>
           </div>
           <h2>{{ item.title }}</h2>
           <p>{{ item.content }}</p>
         </article>
+
+        <div v-if="meta && meta.last_page > 1" class="pagination">
+          <button
+            class="btn btn-secondary"
+            :disabled="page <= 1"
+            @click="page--"
+          >
+            Anterior
+          </button>
+          <span class="pagination-info">Página {{ page }} de {{ meta.last_page }}</span>
+          <button
+            class="btn btn-secondary"
+            :disabled="page >= meta.last_page"
+            @click="page++"
+          >
+            Siguiente
+          </button>
+        </div>
 
       </div>
     </section>
@@ -27,29 +49,55 @@
 </template>
 
 <script setup>
-const news = [
-  {
-    title: 'Gran victoria de Atlético Sur',
-    content: 'El equipo de primera división logró una importante victoria por 2 a 0 en la última fecha del campeonato. Un gran partido que deja al Sureño bien posicionado en la tabla.',
-    date: 'Marzo 2026',
-    category: 'Primera',
-    badgeClass: ''
-  },
-  {
-    title: 'Comenzó la temporada de la escuelita',
-    content: 'Más de 80 chicos comenzaron los entrenamientos en el club. La escuelita sigue creciendo y este año promete ser una gran temporada para los más pequeños.',
-    date: 'Marzo 2026',
-    category: 'Escuelita',
-    badgeClass: ''
-  },
-  {
-    title: 'Nuevo sponsor para el club',
-    content: 'Una empresa local se suma al apoyo del fútbol infantil. Agradecemos el compromiso con el desarrollo deportivo de nuestra ciudad.',
-    date: 'Febrero 2026',
-    category: 'Institucional',
-    badgeClass: 'badge-gold'
+const { get } = useApi()
+
+const news = ref([])
+const meta = ref(null)
+const page = ref(1)
+const loading = ref(true)
+
+async function fetchNews() {
+  loading.value = true
+  try {
+    const response = await get(`/api/news?page=${page.value}&per_page=10`)
+    news.value = response.data || []
+    meta.value = response.meta || null
+  } catch {
+    news.value = [
+      {
+        id: 0,
+        title: 'Debut Historico',
+        content: 'El equipo de primera división logró una importante empate por 0 a 0 en su debut historico. Un gran partido que deja al Sureño bien posicionado.',
+        published_at: '2026-03-01T18:00:00-03:00',
+        category: 'Primera'
+      },
+      {
+        id: 2,
+        title: 'Nuevos sponsor para el club',
+        content: 'Se suman los nuevos sponsors para acompañar el debut del club en la Primera Division de la Liga Departamental de Gualeguaychú. Agradecemos el compromiso con el desarrollo deportivo de nuestra ciudad.',
+        published_at: '2026-02-15T18:00:00-03:00',
+        category: 'Institucional'
+      }
+    ]
+  } finally {
+    loading.value = false
   }
-]
+}
+
+watch(page, () => fetchNews())
+
+onMounted(() => fetchNews())
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('es-AR', {
+    year: 'numeric',
+    month: 'long'
+  })
+}
+
+function badgeClass(category) {
+  return category === 'Institucional' ? 'badge-gold' : ''
+}
 </script>
 
 <style scoped>
@@ -90,6 +138,27 @@ const news = [
   color: var(--gray-500);
   line-height: 1.8;
   margin-bottom: 0;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--gray-400);
+  font-size: 16px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: var(--gray-500);
+  font-weight: 500;
 }
 
 @media (max-width: 640px) {

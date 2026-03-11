@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx nuxi:*)"
+      "Bash(npx nuxi:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X OPTIONS -H \"Origin: http://localhost:3000\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: Content-Type\" http://gestion.atleticosur.com.ar/api/contact-messages)",
+      "Bash(curl -s -D - -o /dev/null -X OPTIONS -H \"Origin: http://localhost:3000\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: Content-Type\" http://gestion.atleticosur.com.ar/api/contact-messages)"
     ]
   }
 }

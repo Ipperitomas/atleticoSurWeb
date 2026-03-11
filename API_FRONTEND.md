@@ -229,6 +229,212 @@ if (match) {
 
 ---
 
+## 4. Noticias - Pantallas (app\components\NewsSection.vue y app\pages\noticias.vue)
+
+El frontend consume noticias de forma publica. El backend debe proveer un CRUD completo para el panel de gestion y un endpoint publico de lectura.
+
+### 4.1 Listar noticias (publico)
+
+**GET** `/api/news`
+
+Devuelve las noticias publicadas, paginadas y ordenadas por fecha de publicacion (mas reciente primero).
+
+#### Query Parameters
+
+| Parametro  | Tipo   | Default | Descripcion                                      |
+|-----------|--------|---------|--------------------------------------------------|
+| `page`     | int    | 1       | Numero de pagina                                 |
+| `per_page` | int    | 10      | Cantidad por pagina (max 50)                     |
+| `category` | string | -       | Filtrar por categoria (ej: "Primera", "Escuelita") |
+
+#### Response exitoso (200)
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Gran victoria de Atletico Sur",
+      "excerpt": "El equipo de primera division logro una importante victoria por 2 a 0.",
+      "content": "El equipo de primera division logro una importante victoria por 2 a 0 en la ultima fecha del campeonato. Un gran partido que deja al Sureno bien posicionado en la tabla.",
+      "category": "Primera",
+      "image_url": "https://tu-dominio.com/storage/news/imagen.jpg",
+      "published_at": "2026-03-10T18:00:00-03:00",
+      "created_at": "2026-03-10T15:00:00-03:00"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 3,
+    "per_page": 10,
+    "total": 25
+  }
+}
+```
+
+| Campo          | Tipo        | Descripcion                                    |
+|---------------|-------------|------------------------------------------------|
+| `id`           | int         | ID de la noticia                               |
+| `title`        | string      | Titulo                                         |
+| `excerpt`      | string      | Resumen corto (max ~200 caracteres)            |
+| `content`      | string      | Contenido completo                             |
+| `category`     | string      | Categoria (Primera, Escuelita, Institucional, etc.) |
+| `image_url`    | string/null | URL de la imagen de portada (nullable)         |
+| `published_at` | string      | Fecha de publicacion ISO 8601                  |
+| `created_at`   | string      | Fecha de creacion ISO 8601                     |
+
+#### Ejemplo fetch
+
+```js
+const response = await fetch('https://TU_DOMINIO/api/news?per_page=3', {
+  headers: { 'Accept': 'application/json' },
+});
+
+const { data, meta } = await response.json();
+// data = array de noticias
+// meta = info de paginacion
+```
+
+---
+
+### 4.2 Ver una noticia (publico)
+
+**GET** `/api/news/{id}`
+
+#### Response exitoso (200)
+
+```json
+{
+  "data": {
+    "id": 1,
+    "title": "Gran victoria de Atletico Sur",
+    "excerpt": "El equipo de primera division logro una importante victoria por 2 a 0.",
+    "content": "Contenido completo de la noticia...",
+    "category": "Primera",
+    "image_url": "https://tu-dominio.com/storage/news/imagen.jpg",
+    "published_at": "2026-03-10T18:00:00-03:00",
+    "created_at": "2026-03-10T15:00:00-03:00"
+  }
+}
+```
+
+#### Response no encontrado (404)
+
+```json
+{
+  "message": "Noticia no encontrada"
+}
+```
+
+---
+
+### 4.3 Crear noticia (panel de gestion, requiere autenticacion)
+
+**POST** `/api/admin/news`
+
+#### Request Body
+
+```json
+{
+  "title": "Nueva noticia del club",
+  "excerpt": "Resumen corto de la noticia",
+  "content": "Contenido completo de la noticia...",
+  "category": "Institucional",
+  "image": "(archivo, opcional)",
+  "is_published": true
+}
+```
+
+| Campo          | Tipo    | Requerido | Max  | Descripcion                          |
+|---------------|---------|-----------|------|--------------------------------------|
+| `title`        | string  | si        | 255  | Titulo de la noticia                 |
+| `excerpt`      | string  | si        | 500  | Resumen corto                        |
+| `content`      | string  | si        | -    | Contenido completo (texto o HTML)    |
+| `category`     | string  | si        | 100  | Categoria                            |
+| `image`        | file    | no        | 2MB  | Imagen de portada (jpg, png, webp)   |
+| `is_published` | boolean | no        | -    | Si es true, se publica inmediatamente. Si es false, queda como borrador. Default: false |
+
+#### Response exitoso (201)
+
+```json
+{
+  "message": "Noticia creada correctamente",
+  "data": { ... }
+}
+```
+
+#### Response con errores de validacion (422)
+
+```json
+{
+  "message": "The title field is required.",
+  "errors": {
+    "title": ["The title field is required."]
+  }
+}
+```
+
+---
+
+### 4.4 Editar noticia (panel de gestion, requiere autenticacion)
+
+**PUT** `/api/admin/news/{id}`
+
+Mismos campos que el POST de creacion. Todos opcionales (solo se actualizan los enviados).
+
+#### Response exitoso (200)
+
+```json
+{
+  "message": "Noticia actualizada correctamente",
+  "data": { ... }
+}
+```
+
+---
+
+### 4.5 Eliminar noticia (panel de gestion, requiere autenticacion)
+
+**DELETE** `/api/admin/news/{id}`
+
+#### Response exitoso (200)
+
+```json
+{
+  "message": "Noticia eliminada correctamente"
+}
+```
+
+---
+
+### 4.6 Publicar / Despublicar noticia (panel de gestion, requiere autenticacion)
+
+**PATCH** `/api/admin/news/{id}/toggle-publish`
+
+Cambia el estado de publicacion de la noticia. Si esta publicada la despublica, y viceversa.
+
+#### Response exitoso (200)
+
+```json
+{
+  "message": "Noticia publicada correctamente",
+  "is_published": true,
+  "published_at": "2026-03-11T14:00:00-03:00"
+}
+```
+
+---
+
+### Notas sobre Noticias
+
+- Solo las noticias con `is_published = true` aparecen en el GET publico `/api/news`.
+- Las rutas `/api/admin/news/*` requieren autenticacion (middleware `auth:sanctum`).
+- Las categorias sugeridas son: **Primera**, **Escuelita**, **Institucional**, **Juveniles**. Pero el campo es libre (string), asi pueden agregar nuevas categorias sin tocar codigo.
+- La imagen se sube como `multipart/form-data` en el POST/PUT de creacion/edicion.
+- El frontend del sitio publico solo necesita los endpoints 4.1 (listar) y 4.2 (ver una).
+
+---
+
 ## Notas
 
 - Si el backend esta en un dominio distinto al frontend, los CORS ya estan configurados por Laravel Sanctum.

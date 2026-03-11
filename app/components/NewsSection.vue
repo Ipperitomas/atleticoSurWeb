@@ -9,13 +9,13 @@
       </div>
 
       <div class="news-grid">
-        <article v-for="(item, i) in news" :key="i" class="news-card">
-          <div class="news-img" :style="{ background: item.color }">
-            <span class="news-icon">{{ item.icon }}</span>
+        <article v-for="item in news" :key="item.id" class="news-card">
+          <div class="news-img" :style="{ background: item.image_url ? `url(${item.image_url}) center/cover` : fallbackGradient(item.category) }">
+            <span v-if="!item.image_url" class="news-icon">{{ categoryIcon(item.category) }}</span>
           </div>
           <div class="news-body">
             <div class="news-meta">
-              <span class="news-date">{{ item.date }}</span>
+              <span class="news-date">{{ formatDate(item.published_at) }}</span>
               <span class="badge">{{ item.category }}</span>
             </div>
             <h3>{{ item.title }}</h3>
@@ -33,32 +33,69 @@
 </template>
 
 <script setup>
-const news = [
+const { get } = useApi()
+
+const fallbackNews = [
   {
+    id: 0,
     title: 'Gran victoria de Atlético Sur',
     excerpt: 'El equipo de primera división logró una importante victoria por 2 a 0 en la última fecha del campeonato.',
-    date: 'Marzo 2026',
+    published_at: '2026-03-01T18:00:00-03:00',
     category: 'Primera',
-    icon: '⚽',
-    color: 'linear-gradient(135deg, #0a1628, #1a2d4d)'
+    image_url: null
   },
   {
+    id: 1,
     title: 'Comenzó la temporada de la escuelita',
     excerpt: 'Más de 80 chicos comenzaron los entrenamientos en el club con mucho entusiasmo.',
-    date: 'Marzo 2026',
+    published_at: '2026-03-01T18:00:00-03:00',
     category: 'Escuelita',
-    icon: '🌟',
-    color: 'linear-gradient(135deg, #1a4a2e, #0a1628)'
+    image_url: null
   },
   {
+    id: 2,
     title: 'Nuevo sponsor para el club',
     excerpt: 'Una empresa local se suma al apoyo del fútbol infantil y juvenil del club.',
-    date: 'Febrero 2026',
+    published_at: '2026-02-15T18:00:00-03:00',
     category: 'Institucional',
-    icon: '🤝',
-    color: 'linear-gradient(135deg, #4a2a1a, #0a1628)'
+    image_url: null
   }
 ]
+
+const news = ref(fallbackNews)
+
+onMounted(async () => {
+  try {
+    const response = await get('/api/news?per_page=3')
+    if (response?.data?.length) {
+      news.value = response.data
+    }
+  } catch {
+    // usa fallback
+  }
+})
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('es-AR', {
+    year: 'numeric',
+    month: 'long'
+  })
+}
+
+function categoryIcon(category) {
+  const icons = { Primera: '⚽', Escuelita: '🌟', Institucional: '🤝', Juveniles: '🏆' }
+  return icons[category] || '📰'
+}
+
+function fallbackGradient(category) {
+  const gradients = {
+    Primera: 'linear-gradient(135deg, #0a1628, #1a2d4d)',
+    Escuelita: 'linear-gradient(135deg, #1a4a2e, #0a1628)',
+    Institucional: 'linear-gradient(135deg, #4a2a1a, #0a1628)',
+    Juveniles: 'linear-gradient(135deg, #1a2d4d, #2a1a4a)'
+  }
+  return gradients[category] || 'linear-gradient(135deg, #0a1628, #1a2d4d)'
+}
 </script>
 
 <style scoped>
