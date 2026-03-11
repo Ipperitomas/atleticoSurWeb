@@ -189,9 +189,13 @@ const board = {
 const boardMembers = [
   { role: 'Vicepresidenta', name: 'Cecilia Recalde' },
   { role: 'Secretario', name: 'Santiago Gomez' },
+  { role: 'Pro Secretaria', name: 'Maria Jose Sack' },
   { role: 'Tesorera', name: 'Maria Soledad Godoy' },
-  { role: 'Tesorero', name: 'Juan Mendez' },
-  { role: 'Vocales', name: 'Ipperi Tomas | | | | |' }
+  { role: 'Pro Tesorero', name: 'Juan Mendez' },
+  { role: 'Vocales Titulares', name: 'Ipperi Tomas | Miguel Arellano | Monica Procura ' },
+  { role: 'Vocales Suplentes', name: 'Javier Gomez | Eugenia Procura | Ramiro Gomez ' },
+  { role: 'Revisores de cuentas Titulares', name: 'Juan Gonzales | Oscar Benitez ' },
+  { role: 'Revisores de cuentas Suplentes', name: 'Mariano Messeguer | Juan Leiva ' },
 ]
 </script>
 
