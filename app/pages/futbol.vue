@@ -58,7 +58,7 @@ const divisions = [
     subtitle: 'Los futuros cracks',
     icon: '⭐',
     desc: 'La escuelita de fútbol recibe niños desde los 5 años con el objetivo de enseñar fundamentos del juego y valores deportivos.',
-    items: ['2018 |  2019 |  2020 y 2021']
+    items: ['2018','2019','2020','2021']
   },
   {
     name: 'Futbol Amateur',

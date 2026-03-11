@@ -43,18 +43,21 @@
 </template>
 
 <script setup>
+const { apiBase } = useApi()
+
 // Datos fallback por si la API no responde
 const fallbackMatch = {
   home: { name: 'Atlético Sur', logo: '/logo.png', isLocal: true },
   away: { name: 'Defensores del Oeste', logo: '/logovisitante.png', isLocal: false },
   date: '2026-03-12T22:00:00',
-  league: 'Copa Gualeguaychú -  Liga Departamental',
+  league: 'Copa Gualeguaychú - Liga Departamental',
   venue: 'Estadio Municipal',
   matchday: 'Fecha 2'
 }
 
-// Fetch a la API — en dev usa el server route, en producción pegar a la API real
-const { data: apiMatch } = await useFetch('/api/next-match', {
+// Fetch desde la API externa, con fallback si falla o no hay partido
+const { data: apiMatch } = await useFetch(`${apiBase}/api/next-match`, {
+  headers: { 'Accept': 'application/json' },
   default: () => fallbackMatch
 })
 

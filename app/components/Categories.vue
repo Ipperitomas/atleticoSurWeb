@@ -34,7 +34,7 @@ const categories = [
     icon: '🏆'
   },
   {
-    name: 'Reserva',
+    name: 'Sub 23',
     desc: 'Jóvenes talentos preparándose para el primer equipo.',
     icon: '💪'
   },

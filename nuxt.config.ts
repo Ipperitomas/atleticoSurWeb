@@ -7,6 +7,12 @@ export default defineNuxtConfig({
     preset: 'static'
   },
 
+  runtimeConfig: {
+    public: {
+      apiBase: ''
+    }
+  },
+
   css: [
     '~/assets/css/main.css'
   ],
