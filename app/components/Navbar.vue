@@ -14,6 +14,7 @@
         <li><NuxtLink to="/" @click="menuOpen = false">Inicio</NuxtLink></li>
         <li><NuxtLink to="/el-club" @click="menuOpen = false">El Club</NuxtLink></li>
         <li><NuxtLink to="/futbol" @click="menuOpen = false">Fútbol</NuxtLink></li>
+        <li><NuxtLink to="/fiesta-asado-con-cuero" @click="menuOpen = false">La Fiesta</NuxtLink></li>
         <li><NuxtLink to="/noticias" @click="menuOpen = false">Noticias</NuxtLink></li>
         <li><NuxtLink to="/socios" @click="menuOpen = false">Socios</NuxtLink></li>
         <li><NuxtLink to="/contacto" @click="menuOpen = false">Contacto</NuxtLink></li>
