@@ -3,7 +3,7 @@
     <div class="container">
 
       <div class="section-header">
-        <h2>Ultimo Partido</h2>
+        <h2>Último Partido</h2>
       </div>
 
       <div class="match-card">
